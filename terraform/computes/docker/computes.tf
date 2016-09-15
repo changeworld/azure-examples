@@ -101,6 +101,17 @@ resource "azurerm_virtual_machine" "test" {
   os_profile_linux_config {
     disable_password_authentication = false
   }
+  provisioner "remote-exec" {
+    connection {
+      type     = "ssh"
+      user     = "${var.default_user}"
+      password = "${var.default_password}"
+      host     = "${element(azurerm_public_ip.test.*.ip_address, count.index)}"
+    }
+    inline = [
+      "echo ${var.default_password} | sudo -S docker run hello-world"
+    ]
+  }
   tags {
     environment = "test"
   }
