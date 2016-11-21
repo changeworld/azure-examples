@@ -31,5 +31,11 @@
             <version>0.6</version>
             <scope>test</scope>
         </dependency>
+        <!-- Spring Redis -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>1.7.4.RELEASE</version>
+        </dependency>
     </dependencies>
 </project>
