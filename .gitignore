@@ -8,7 +8,6 @@
 # Icon must end with two \r
 Icon
 
-
 # Thumbnails
 ._*
 
@@ -32,3 +31,10 @@ Temporary Items
 *.tfstate*
 *.tfvars
 *.env
+
+# IntelliJ IDEA
+*.idea*
+*.iml
+
+# Java
+*.class
