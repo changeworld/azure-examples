@@ -1,4 +1,4 @@
-package com.github.changeworld.redis.client.jedis;
+package com.github.changeworld.redis.client;
 
 import com.github.changeworld.redis.client.BaseClient;
 import java.io.IOException;
