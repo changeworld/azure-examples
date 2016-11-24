@@ -1,13 +1,13 @@
 package com.github.changeworld.redis.client.jedis;
 
-import com.github.changeworld.redis.client.RedisClient;
+import com.github.changeworld.redis.client.BaseClient;
 import java.io.IOException;
 import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * @author changeworld
  */
-public class SpringDataRedisClient implements RedisClient {
+public class SpringDataRedisClient implements BaseClient {
     private RedisTemplate<Object, Object> redisTemplate;
 
     public SpringDataRedisClient(RedisTemplate redisTemplate) {
