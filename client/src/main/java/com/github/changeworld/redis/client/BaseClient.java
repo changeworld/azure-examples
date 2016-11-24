@@ -5,7 +5,7 @@ import java.io.IOException;
 /**
  * @author changeworld
  */
-public interface RedisClient {
+public interface BaseClient {
     /**
      * Same as SET command in Redis
      *

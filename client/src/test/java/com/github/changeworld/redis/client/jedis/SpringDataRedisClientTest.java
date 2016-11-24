@@ -1,9 +1,11 @@
 package com.github.changeworld.redis.client.jedis;
 
 import java.io.IOException;
+
+import com.github.changeworld.redis.client.SpringDataRedisClient;
 import org.junit.Test;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.JedisShardInfo;
 import redis.embedded.RedisServer;
@@ -21,9 +23,9 @@ public class SpringDataRedisClientTest {
         Boolean flag = true;
         try {
             redisServer.start();
+            RedisTemplate<Object, Object> redisTemplate = new RedisTemplate();
             JedisShardInfo shardInfo = new JedisShardInfo("localhost", 6379);
             JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(shardInfo);
-            RedisTemplate<Object, Object> redisTemplate = new RedisTemplate();
             redisTemplate.setConnectionFactory(jedisConnectionFactory);
             redisTemplate.setKeySerializer(new StringRedisSerializer());
             redisTemplate.setValueSerializer(new StringRedisSerializer());
@@ -47,9 +49,9 @@ public class SpringDataRedisClientTest {
         String value = "value2";
         try {
             redisServer.start();
+            RedisTemplate<Object, Object> redisTemplate = new RedisTemplate();
             JedisShardInfo shardInfo = new JedisShardInfo("localhost", 6379);
             JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(shardInfo);
-            RedisTemplate<Object, Object> redisTemplate = new RedisTemplate();
             redisTemplate.setConnectionFactory(jedisConnectionFactory);
             redisTemplate.setKeySerializer(new StringRedisSerializer());
             redisTemplate.setValueSerializer(new StringRedisSerializer());
