@@ -27,4 +27,8 @@ public class Client implements BaseClient {
     public String get(String key) throws IOException {
         return getRedisClient().get(key);
     }
+
+    public void close() {
+        getRedisClient().close();
+    }
 }
