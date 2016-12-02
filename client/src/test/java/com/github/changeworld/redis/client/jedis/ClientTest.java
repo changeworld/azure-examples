@@ -1,10 +1,14 @@
 package com.github.changeworld.redis.client.jedis;
 
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisShardInfo;
 import redis.embedded.RedisServer;
 import java.io.IOException;
+
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -12,43 +16,53 @@ import static org.junit.Assert.fail;
  * @author changeworld
  */
 public class ClientTest {
+    private static RedisServer redisServer;
+    private static Jedis jedis;
+    private static Client client;
+
+    private static final String FOO = "foo";
+    private static final String BAR = "bar";
+    private static final String HOST = "localhost";
+    private static final int PORT = 6379;
+
+    @BeforeClass
+    public static void beforeClass() throws IOException {
+        redisServer = new RedisServer(PORT);
+        redisServer.start();
+    }
+
+    @AfterClass
+    public static void afterClass() throws IOException {
+        redisServer.stop();
+    }
+
     @Test
-    public void testSet() throws IOException {
-        RedisServer redisServer = new RedisServer(6379);
+    public void shouldJedisCanSet() throws IOException {
         Boolean flag = true;
         try {
-            redisServer.start();
-            JedisShardInfo shardInfo = new JedisShardInfo("localhost", 6379);
-            Jedis jedis = new Jedis(shardInfo);
-            Client jedisClient = new Client(jedis);
-            jedisClient.set("key1", "value1");
+            JedisShardInfo shardInfo = new JedisShardInfo(HOST, PORT);
+            jedis = new Jedis(shardInfo);
+            client = new Client(jedis);
+            client.set(FOO, BAR);
         } catch (Exception e) {
             flag = false;
             e.printStackTrace();
             fail();
-        } finally {
-            redisServer.stop();
         }
         assertTrue(flag);
     }
 
     @Test
-    public void testGet() throws IOException {
-        RedisServer redisServer = new RedisServer(6379);
-        String key   = "key2";
-        String value = "value2";
+    public void shouldJedisCanGetAfterSet() throws IOException {
         try {
-            redisServer.start();
-            JedisShardInfo shardInfo = new JedisShardInfo("localhost", 6379);
-            Jedis jedis = new Jedis(shardInfo);
-            Client jedisClient = new Client(jedis);
-            jedisClient.set(key, value);
-            assert(jedisClient.get(key).equals(value));
+            JedisShardInfo shardInfo = new JedisShardInfo(HOST, PORT);
+            jedis = new Jedis(shardInfo);
+            client = new Client(jedis);
+            client.set(FOO, BAR);
+            assertTrue(client.get(FOO).equals(BAR));
         } catch (Exception e) {
             e.printStackTrace();
             fail();
-        } finally {
-            redisServer.stop();
         }
     }
 }
