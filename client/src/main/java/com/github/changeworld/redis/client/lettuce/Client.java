@@ -36,4 +36,9 @@ public class Client implements BaseClient {
     public String get(String key) throws IOException {
         return (String) getConnection().sync().get(key);
     }
+
+    public void close() {
+        getConnection().close();
+        getRedisClient().shutdown();
+    }
 }
