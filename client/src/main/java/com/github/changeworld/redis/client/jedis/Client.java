@@ -14,22 +14,17 @@ public class Client implements BaseClient {
         this.jedis = jedis;
     }
 
+    public Jedis getRedisClient() {
+        return this.jedis;
+    }
+
     @Override
     public void set(String key, String value) throws IOException {
-        try {
-            this.jedis.set(key, value);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        getRedisClient().set(key, value);
     }
 
     @Override
     public String get(String key) throws IOException {
-        try {
-            return this.jedis.get(key);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return getRedisClient().get(key);
     }
 }
