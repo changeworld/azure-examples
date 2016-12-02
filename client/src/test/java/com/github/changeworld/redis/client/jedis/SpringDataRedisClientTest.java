@@ -6,9 +6,6 @@ import com.github.changeworld.redis.client.SpringDataRedisClient;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.JedisShardInfo;
 import redis.embedded.RedisServer;
 
@@ -41,14 +38,8 @@ public class SpringDataRedisClientTest {
     public void shouldSpringDataRedisCanSet() {
         Boolean flag = true;
         try {
-            RedisTemplate<Object, Object> redisTemplate = new RedisTemplate();
-            JedisShardInfo shardInfo = new JedisShardInfo(HOST, PORT);
-            JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(shardInfo);
-            redisTemplate.setConnectionFactory(jedisConnectionFactory);
-            redisTemplate.setKeySerializer(new StringRedisSerializer());
-            redisTemplate.setValueSerializer(new StringRedisSerializer());
-            redisTemplate.afterPropertiesSet();
-            SpringDataRedisClient client = new SpringDataRedisClient(redisTemplate);
+            JedisShardInfo jedisShardInfo = new JedisShardInfo(HOST, PORT);
+            SpringDataRedisClient client = new SpringDataRedisClient(jedisShardInfo);
             client.set(FOO, BAR);
         } catch (Exception e) {
             flag = false;
@@ -59,16 +50,10 @@ public class SpringDataRedisClientTest {
     }
 
     @Test
-    public void testGet() throws IOException {
+    public void shouldSpringDataRedisCanGetAfterSet() {
         try {
-            RedisTemplate<Object, Object> redisTemplate = new RedisTemplate();
-            JedisShardInfo shardInfo = new JedisShardInfo(HOST, PORT);
-            JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(shardInfo);
-            redisTemplate.setConnectionFactory(jedisConnectionFactory);
-            redisTemplate.setKeySerializer(new StringRedisSerializer());
-            redisTemplate.setValueSerializer(new StringRedisSerializer());
-            redisTemplate.afterPropertiesSet();
-            SpringDataRedisClient client = new SpringDataRedisClient(redisTemplate);
+            JedisShardInfo jedisShardInfo = new JedisShardInfo(HOST, PORT);
+            SpringDataRedisClient client = new SpringDataRedisClient(jedisShardInfo);
             client.set(FOO, BAR);
             assertTrue(client.get(FOO).equals(BAR));
         } catch (Exception e) {
