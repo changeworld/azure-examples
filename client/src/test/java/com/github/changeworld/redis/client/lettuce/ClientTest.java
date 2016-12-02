@@ -46,6 +46,8 @@ public class ClientTest {
             flag = false;
             e.printStackTrace();
             fail();
+        } finally {
+            client.close();
         }
         assertTrue(flag);
     }
@@ -60,6 +62,8 @@ public class ClientTest {
         } catch (Exception e) {
             e.printStackTrace();
             fail();
+        } finally {
+            client.close();
         }
     }
 }
