@@ -1,8 +1,11 @@
 package com.github.changeworld.redis.client;
 
-import com.github.changeworld.redis.client.BaseClient;
 import java.io.IOException;
+
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+import redis.clients.jedis.JedisShardInfo;
 
 /**
  * @author changeworld
@@ -10,26 +13,22 @@ import org.springframework.data.redis.core.RedisTemplate;
 public class SpringDataRedisClient implements BaseClient {
     private RedisTemplate<Object, Object> redisTemplate;
 
-    public SpringDataRedisClient(RedisTemplate redisTemplate) {
-        this.redisTemplate = redisTemplate;
+    public SpringDataRedisClient(JedisShardInfo jedisShardInfo) {
+        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(jedisShardInfo);
+        redisTemplate = new RedisTemplate();
+        redisTemplate.setConnectionFactory(jedisConnectionFactory);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.afterPropertiesSet();
     }
 
     @Override
     public void set(String key, String value) throws IOException {
-        try {
-            this.redisTemplate.opsForValue().set(key, value);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        this.redisTemplate.opsForValue().set(key, value);
     }
 
     @Override
     public String get(String key) throws IOException {
-        try {
-            return (String) this.redisTemplate.opsForValue().get(key);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
+        return (String) this.redisTemplate.opsForValue().get(key);
     }
 }

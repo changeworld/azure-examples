@@ -36,7 +36,7 @@ public class ClientTest {
     }
 
     @Test
-    public void shouldLettuceCanSet() throws IOException {
+    public void shouldLettuceCanSet() {
         Boolean flag = true;
         try {
             lettuce = RedisClient.create(HOST);
@@ -53,7 +53,7 @@ public class ClientTest {
     }
 
     @Test
-    public void shouldLettuceCanGetAfterSet() throws IOException {
+    public void shouldLettuceCanGetAfterSet() {
         try {
             lettuce = RedisClient.create(HOST);
             client = new Client(lettuce);

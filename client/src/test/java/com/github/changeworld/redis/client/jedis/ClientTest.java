@@ -37,7 +37,7 @@ public class ClientTest {
     }
 
     @Test
-    public void shouldJedisCanSet() throws IOException {
+    public void shouldJedisCanSet() {
         Boolean flag = true;
         try {
             JedisShardInfo shardInfo = new JedisShardInfo(HOST, PORT);
@@ -55,7 +55,7 @@ public class ClientTest {
     }
 
     @Test
-    public void shouldJedisCanGetAfterSet() throws IOException {
+    public void shouldJedisCanGetAfterSet() {
         try {
             JedisShardInfo shardInfo = new JedisShardInfo(HOST, PORT);
             jedis = new Jedis(shardInfo);
