@@ -1,12 +1,12 @@
 package com.github.changeworld.redis.client.jedis;
 
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisShardInfo;
 import redis.embedded.RedisServer;
+
 import java.io.IOException;
 
 import static org.junit.Assert.assertTrue;
