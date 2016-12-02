@@ -11,22 +11,26 @@ import java.io.IOException;
  * @author changeworld
  */
 public class Client implements BaseClient {
-    private com.lambdaworks.redis.RedisClient redisClient;
+    private RedisClient redisClient;
 
     public Client(RedisClient redisClient) {
         this.redisClient = redisClient;
     }
 
+    public RedisClient getRedisClient() {
+        return this.redisClient;
+    }
+
     @Override
     public void set(String key, String value) throws IOException {
-        StatefulRedisConnection<String, String> connection = this.redisClient.connect();
+        StatefulRedisConnection<String, String> connection = getRedisClient().connect();
         RedisStringCommands sync = connection.sync();
         sync.set(key, value);
     }
 
     @Override
     public String get(String key) throws IOException {
-        StatefulRedisConnection<String, String> connection = this.redisClient.connect();
+        StatefulRedisConnection<String, String> connection = getRedisClient().connect();
         RedisStringCommands sync = connection.sync();
         return (String) sync.get(key);
     }
