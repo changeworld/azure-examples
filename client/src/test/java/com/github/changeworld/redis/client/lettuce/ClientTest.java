@@ -1,12 +1,9 @@
 package com.github.changeworld.redis.client.lettuce;
 
-import com.github.changeworld.redis.client.lettuce.Client;
 import com.lambdaworks.redis.RedisClient;
-import com.lambdaworks.redis.api.StatefulRedisConnection;
-import com.lambdaworks.redis.api.sync.RedisStringCommands;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisShardInfo;
 import redis.embedded.RedisServer;
 
 import java.io.IOException;
@@ -18,40 +15,51 @@ import static org.junit.Assert.fail;
  * @author changeworld
  */
 public class ClientTest {
+    private static RedisServer redisServer;
+    private static RedisClient lettuce;
+    private static Client client;
+
+    private static final String FOO = "foo";
+    private static final String BAR = "bar";
+    private static final String HOST = "redis://localhost";
+    private static final int PORT = 6379;
+
+    @BeforeClass
+    public static void beforeClass() throws IOException {
+        redisServer = new RedisServer(PORT);
+        redisServer.start();
+    }
+
+    @AfterClass
+    public static void afterClass() throws IOException {
+        redisServer.stop();
+    }
+
     @Test
-    public void testSet() throws IOException {
-        RedisServer redisServer = new RedisServer(6379);
+    public void shouldLettuceCanSet() throws IOException {
         Boolean flag = true;
         try {
-            redisServer.start();
-            RedisClient client = RedisClient.create("redis://localhost");
-            Client lettuceClient = new Client(client);
-            lettuceClient.set("key1", "value1");
+            lettuce = RedisClient.create(HOST);
+            client = new Client(lettuce);
+            client.set(FOO, BAR);
         } catch (Exception e) {
             flag = false;
             e.printStackTrace();
             fail();
-        } finally {
-            redisServer.stop();
         }
         assertTrue(flag);
     }
+
     @Test
-    public void testGet() throws IOException {
-        RedisServer redisServer = new RedisServer(6379);
-        String key   = "key2";
-        String value = "value2";
+    public void shouldLettuceCanGetAfterSet() throws IOException {
         try {
-            redisServer.start();
-            RedisClient client = RedisClient.create("redis://localhost");
-            Client lettuceClient = new Client(client);
-            lettuceClient.set(key, value);
-            assert(lettuceClient.get(key).equals(value));
+            lettuce = RedisClient.create(HOST);
+            client = new Client(lettuce);
+            client.set(FOO, BAR);
+            assertTrue(client.get(FOO).equals(BAR));
         } catch (Exception e) {
             e.printStackTrace();
             fail();
-        } finally {
-            redisServer.stop();
         }
     }
 }
