@@ -17,7 +17,6 @@ import static org.junit.Assert.fail;
  */
 public class ClientTest {
     private static RedisServer redisServer;
-    private static Jedis jedis;
     private static Client client;
 
     private static final String FOO = "foo";
@@ -40,9 +39,7 @@ public class ClientTest {
     public void shouldJedisCanSet() {
         Boolean flag = true;
         try {
-            JedisShardInfo shardInfo = new JedisShardInfo(HOST, PORT);
-            jedis = new Jedis(shardInfo);
-            client = new Client(jedis);
+            client = new Client(new Jedis(new JedisShardInfo(HOST, PORT)));
             client.set(FOO, BAR);
         } catch (Exception e) {
             flag = false;
@@ -57,9 +54,7 @@ public class ClientTest {
     @Test
     public void shouldJedisCanGetAfterSet() {
         try {
-            JedisShardInfo shardInfo = new JedisShardInfo(HOST, PORT);
-            jedis = new Jedis(shardInfo);
-            client = new Client(jedis);
+            client = new Client(new Jedis(new JedisShardInfo(HOST, PORT)));
             client.set(FOO, BAR);
             assertTrue(client.get(FOO).equals(BAR));
         } catch (Exception e) {
