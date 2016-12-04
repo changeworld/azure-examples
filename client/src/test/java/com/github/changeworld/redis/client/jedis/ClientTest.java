@@ -39,8 +39,7 @@ public class ClientTest {
     public void shouldJedisCanSet() {
         Boolean flag = true;
         try {
-            client = new Client(new Jedis(new JedisShardInfo(HOST, PORT)));
-            client.set(FOO, BAR);
+            new Client(new Jedis(new JedisShardInfo(HOST, PORT))).set(FOO, BAR);
         } catch (Exception e) {
             flag = false;
             e.printStackTrace();
