@@ -38,14 +38,11 @@ public class ClientTest {
     public void shouldLettuceCanSet() {
         Boolean flag = true;
         try {
-            client = new Client(RedisClient.create(HOST));
-            client.set(FOO, BAR);
+            new Client(RedisClient.create(HOST)).set(FOO, BAR);
         } catch (Exception e) {
             flag = false;
             e.printStackTrace();
             fail();
-        } finally {
-            client.close();
         }
         assertTrue(flag);
     }
