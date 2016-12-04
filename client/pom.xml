@@ -38,10 +38,12 @@
             <version>1.7.4.RELEASE</version>
         </dependency>
         <!-- lettuce -->
+        <!-- Spring Data Redis 1.x supports only the lettuce Version 3.x branch -->
+        <!-- Without Spring Data Redis 1.x, you can use lettuce Version 4.x branch -->
         <dependency>
             <groupId>biz.paluch.redis</groupId>
             <artifactId>lettuce</artifactId>
-            <version>4.3.0.Final</version>
+            <version>3.5.0.Final</version>
             <classifier>shaded</classifier>
             <exclusions>
                 <exclusion>

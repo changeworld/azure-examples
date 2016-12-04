@@ -1,14 +1,14 @@
-package com.github.changeworld.redis.client.jedis;
-
-import java.io.IOException;
+package com.github.changeworld.redis.client.lettuce;
 
 import com.github.changeworld.redis.client.SpringDataRedisClient;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import redis.clients.jedis.JedisShardInfo;
+import org.springframework.data.redis.connection.lettuce.DefaultLettucePool;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import redis.embedded.RedisServer;
+
+import java.io.IOException;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -39,7 +39,12 @@ public class SpringDataRedisClientTest {
     public void shouldSpringDataRedisCanSet() {
         Boolean flag = true;
         try {
-            SpringDataRedisClient client = new SpringDataRedisClient(new JedisConnectionFactory(new JedisShardInfo(HOST, PORT)));
+            DefaultLettucePool defaultLettucePool = new DefaultLettucePool(HOST, PORT);
+            defaultLettucePool.afterPropertiesSet();
+            LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(defaultLettucePool);
+            lettuceConnectionFactory.afterPropertiesSet();
+            lettuceConnectionFactory.setShareNativeConnection(true);
+            SpringDataRedisClient client = new SpringDataRedisClient(lettuceConnectionFactory);
             client.set(FOO, BAR);
         } catch (Exception e) {
             flag = false;
@@ -52,7 +57,12 @@ public class SpringDataRedisClientTest {
     @Test
     public void shouldSpringDataRedisCanGetAfterSet() {
         try {
-            SpringDataRedisClient client = new SpringDataRedisClient(new JedisConnectionFactory(new JedisShardInfo(HOST, PORT)));
+            DefaultLettucePool defaultLettucePool = new DefaultLettucePool(HOST, PORT);
+            defaultLettucePool.afterPropertiesSet();
+            LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(defaultLettucePool);
+            lettuceConnectionFactory.afterPropertiesSet();
+            lettuceConnectionFactory.setShareNativeConnection(true);
+            SpringDataRedisClient client = new SpringDataRedisClient(lettuceConnectionFactory);
             client.set(FOO, BAR);
             assertTrue(client.get(FOO).equals(BAR));
         } catch (Exception e) {

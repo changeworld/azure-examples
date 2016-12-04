@@ -2,10 +2,9 @@ package com.github.changeworld.redis.client;
 
 import java.io.IOException;
 
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import redis.clients.jedis.JedisShardInfo;
 
 /**
  * @author changeworld
@@ -13,10 +12,9 @@ import redis.clients.jedis.JedisShardInfo;
 public class SpringDataRedisClient implements BaseClient {
     private RedisTemplate<Object, Object> redisTemplate;
 
-    public SpringDataRedisClient(JedisShardInfo jedisShardInfo) {
-        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(jedisShardInfo);
+    public SpringDataRedisClient(RedisConnectionFactory redisConnectionFactory) {
         redisTemplate = new RedisTemplate();
-        redisTemplate.setConnectionFactory(jedisConnectionFactory);
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         redisTemplate.afterPropertiesSet();
