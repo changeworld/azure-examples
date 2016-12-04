@@ -6,6 +6,7 @@ import com.github.changeworld.redis.client.SpringDataRedisClient;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.JedisShardInfo;
 import redis.embedded.RedisServer;
 
@@ -38,8 +39,7 @@ public class SpringDataRedisClientTest {
     public void shouldSpringDataRedisCanSet() {
         Boolean flag = true;
         try {
-            JedisShardInfo jedisShardInfo = new JedisShardInfo(HOST, PORT);
-            SpringDataRedisClient client = new SpringDataRedisClient(jedisShardInfo);
+            SpringDataRedisClient client = new SpringDataRedisClient(new JedisConnectionFactory(new JedisShardInfo(HOST, PORT)));
             client.set(FOO, BAR);
         } catch (Exception e) {
             flag = false;
@@ -52,8 +52,7 @@ public class SpringDataRedisClientTest {
     @Test
     public void shouldSpringDataRedisCanGetAfterSet() {
         try {
-            JedisShardInfo jedisShardInfo = new JedisShardInfo(HOST, PORT);
-            SpringDataRedisClient client = new SpringDataRedisClient(jedisShardInfo);
+            SpringDataRedisClient client = new SpringDataRedisClient(new JedisConnectionFactory(new JedisShardInfo(HOST, PORT)));
             client.set(FOO, BAR);
             assertTrue(client.get(FOO).equals(BAR));
         } catch (Exception e) {
