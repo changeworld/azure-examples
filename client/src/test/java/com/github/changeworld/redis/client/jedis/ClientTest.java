@@ -44,8 +44,6 @@ public class ClientTest {
             flag = false;
             e.printStackTrace();
             fail();
-        } finally {
-            client.close();
         }
         assertTrue(flag);
     }
