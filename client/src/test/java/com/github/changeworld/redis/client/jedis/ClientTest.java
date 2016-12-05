@@ -1,5 +1,6 @@
 package com.github.changeworld.redis.client.jedis;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -30,6 +31,13 @@ public class ClientTest {
         redisServer.start();
     }
 
+    @After
+    public void after() throws IOException {
+        if (client != null) {
+            client.close();
+        }
+    }
+
     @AfterClass
     public static void afterClass() throws IOException {
         redisServer.stop();
@@ -37,15 +45,13 @@ public class ClientTest {
 
     @Test
     public void shouldJedisCanSet() {
-        Boolean flag = true;
         try {
-            new Client(new Jedis(new JedisShardInfo(HOST, PORT))).set(FOO, BAR);
+            client = new Client(new Jedis(new JedisShardInfo(HOST, PORT)));
+            client.set(FOO, BAR);
         } catch (Exception e) {
-            flag = false;
             e.printStackTrace();
             fail();
         }
-        assertTrue(flag);
     }
 
     @Test
@@ -57,8 +63,6 @@ public class ClientTest {
         } catch (Exception e) {
             e.printStackTrace();
             fail();
-        } finally {
-            client.close();
         }
     }
 }
