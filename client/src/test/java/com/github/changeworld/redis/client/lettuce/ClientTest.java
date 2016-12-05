@@ -1,6 +1,7 @@
 package com.github.changeworld.redis.client.lettuce;
 
 import com.lambdaworks.redis.RedisClient;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -29,6 +30,13 @@ public class ClientTest {
         redisServer.start();
     }
 
+    @After
+    public void after() throws IOException {
+        if (client != null) {
+            client.close();
+        }
+    }
+
     @AfterClass
     public static void afterClass() throws IOException {
         redisServer.stop();
@@ -36,15 +44,13 @@ public class ClientTest {
 
     @Test
     public void shouldLettuceCanSet() {
-        Boolean flag = true;
         try {
-            new Client(RedisClient.create(HOST)).set(FOO, BAR);
+            client = new Client(RedisClient.create(HOST));
+            client.set(FOO, BAR);
         } catch (Exception e) {
-            flag = false;
             e.printStackTrace();
             fail();
         }
-        assertTrue(flag);
     }
 
     @Test
@@ -56,8 +62,6 @@ public class ClientTest {
         } catch (Exception e) {
             e.printStackTrace();
             fail();
-        } finally {
-            client.close();
         }
     }
 }
