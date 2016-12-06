@@ -10,54 +10,48 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.JedisShardInfo;
 import redis.embedded.RedisServer;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author changeworld
  */
 public class SpringDataRedisClientTest {
-    private static RedisServer redisServer;
+    static final String FOO = "foo";
+    static final String BAR = "bar";
+    static final String HOST = "localhost";
+    static final int PORT = 6379;
+    static final RedisServer REDIS_SERVER = newRedisServer();
 
-    private static final String FOO = "foo";
-    private static final String BAR = "bar";
-    private static final String HOST = "localhost";
-    private static final int PORT = 6379;
+    static RedisServer newRedisServer() {
+        try {
+            return new RedisServer(PORT);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 
     @BeforeClass
-    public static void beforeClass() throws IOException {
-        redisServer = new RedisServer(PORT);
-        redisServer.start();
+    public static void beforeClass() {
+        try {
+            REDIS_SERVER.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @AfterClass
-    public static void afterClass() throws IOException {
-        redisServer.stop();
+    public static void afterClass() {
+        REDIS_SERVER.stop();
     }
 
     @Test
-    public void shouldSpringDataRedisCanSet() {
-        Boolean flag = true;
+    public void shouldSpringDataRedisCanReadWrite() {
         try {
             SpringDataRedisClient client = new SpringDataRedisClient(new JedisConnectionFactory(new JedisShardInfo(HOST, PORT)));
             client.set(FOO, BAR);
-        } catch (Exception e) {
-            flag = false;
-            e.printStackTrace();
-            fail();
-        }
-        assertTrue(flag);
-    }
-
-    @Test
-    public void shouldSpringDataRedisCanGetAfterSet() {
-        try {
-            SpringDataRedisClient client = new SpringDataRedisClient(new JedisConnectionFactory(new JedisShardInfo(HOST, PORT)));
-            client.set(FOO, BAR);
-            assertTrue(client.get(FOO).equals(BAR));
+            assertEquals(BAR, client.get(FOO));
         } catch (Exception e) {
             e.printStackTrace();
-            fail();
         }
     }
 }
