@@ -44,17 +44,6 @@ public class ClientTest {
     }
 
     @Test
-    public void shouldJedisCanSet() {
-        try {
-            client = new Client(new Jedis(new JedisShardInfo(HOST, PORT)));
-            client.set(FOO, BAR);
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }
-    }
-
-    @Test
     public void shouldJedisCanGetAfterSet() {
         try {
             client = new Client(new Jedis(new JedisShardInfo(HOST, PORT)));
