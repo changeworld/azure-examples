@@ -43,17 +43,6 @@ public class ClientTest {
     }
 
     @Test
-    public void shouldLettuceCanSet() {
-        try {
-            client = new Client(RedisClient.create(HOST));
-            client.set(FOO, BAR);
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }
-    }
-
-    @Test
     public void shouldLettuceCanGetAfterSet() {
         try {
             client = new Client(RedisClient.create(HOST));
