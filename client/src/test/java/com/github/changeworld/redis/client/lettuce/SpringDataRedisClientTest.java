@@ -17,41 +17,32 @@ import static org.junit.Assert.fail;
  * @author changeworld
  */
 public class SpringDataRedisClientTest {
-    private static RedisServer redisServer;
-
     private static final String FOO = "foo";
     private static final String BAR = "bar";
     private static final String HOST = "localhost";
     private static final int PORT = 6379;
+    static final RedisServer REDIS_SERVER = newRedisServer();
+
+    static RedisServer newRedisServer() {
+        try {
+            return new RedisServer(PORT);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 
     @BeforeClass
-    public static void beforeClass() throws IOException {
-        redisServer = new RedisServer(PORT);
-        redisServer.start();
+    public static void beforeClass() {
+        try {
+            REDIS_SERVER.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @AfterClass
-    public static void afterClass() throws IOException {
-        redisServer.stop();
-    }
-
-    @Test
-    public void shouldSpringDataRedisCanSet() {
-        Boolean flag = true;
-        try {
-            DefaultLettucePool defaultLettucePool = new DefaultLettucePool(HOST, PORT);
-            defaultLettucePool.afterPropertiesSet();
-            LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(defaultLettucePool);
-            lettuceConnectionFactory.afterPropertiesSet();
-            lettuceConnectionFactory.setShareNativeConnection(true);
-            SpringDataRedisClient client = new SpringDataRedisClient(lettuceConnectionFactory);
-            client.set(FOO, BAR);
-        } catch (Exception e) {
-            flag = false;
-            e.printStackTrace();
-            fail();
-        }
-        assertTrue(flag);
+    public static void afterClass() {
+        REDIS_SERVER.stop();
     }
 
     @Test
