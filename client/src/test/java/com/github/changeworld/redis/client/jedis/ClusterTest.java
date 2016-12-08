@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.JedisCluster;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -17,7 +16,6 @@ import static org.junit.Assert.fail;
  * @author changeworld
  */
 public class ClusterTest {
-    private static JedisCluster jedisCluster;
     private static Cluster cluster;
     private static Set<HostAndPort> jedisClusterNodes;
 
@@ -50,21 +48,6 @@ public class ClusterTest {
      * However, Redis 3.0 or greater is required for the Redis Cluster function.
      * So, the following works only with Redis Version 3.x.
     @Test
-    public void shouldJedisClusterCanSet() {
-        try {
-            cluster = new Cluster(jedisClusterNodes,
-                    TIMEOUT,
-                    TIMEOUT,
-                    MAXREDIRECTS,
-                    KEY);
-            cluster.set(FOO, BAR);
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }
-    }
-
-    @Test
     public void shouldJedisClusterCanGetAfterSet() {
         try {
             cluster = new Cluster(jedisClusterNodes,
@@ -73,6 +56,7 @@ public class ClusterTest {
                     MAXREDIRECTS,
                     KEY);
             cluster.set(FOO, BAR);
+            assertTrue(cluster.get(FOO).equals(BAR));
         } catch (Exception e) {
             e.printStackTrace();
             fail();
