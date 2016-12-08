@@ -10,25 +10,35 @@ import redis.embedded.RedisServer;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
  * @author changeworld
  */
 public class ClientTest {
-    private static RedisServer redisServer;
     private static Client client;
-
     private static final String FOO = "foo";
     private static final String BAR = "bar";
     private static final String HOST = "localhost";
     private static final int PORT = 6379;
+    static final RedisServer REDIS_SERVER = newRedisServer();
+
+    static RedisServer newRedisServer() {
+        try {
+            return new RedisServer(PORT);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 
     @BeforeClass
-    public static void beforeClass() throws IOException {
-        redisServer = new RedisServer(PORT);
-        redisServer.start();
+    public static void beforeClass() {
+        try {
+            REDIS_SERVER.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @After
@@ -39,8 +49,8 @@ public class ClientTest {
     }
 
     @AfterClass
-    public static void afterClass() throws IOException {
-        redisServer.stop();
+    public static void afterClass() {
+        REDIS_SERVER.stop();
     }
 
     @Test
@@ -48,7 +58,7 @@ public class ClientTest {
         try {
             client = new Client(new Jedis(new JedisShardInfo(HOST, PORT)));
             client.set(FOO, BAR);
-            assertTrue(client.get(FOO).equals(BAR));
+            assertEquals(BAR, client.get(FOO));
         } catch (Exception e) {
             e.printStackTrace();
             fail();
