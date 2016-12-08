@@ -10,7 +10,7 @@ import redis.embedded.RedisServer;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
@@ -55,7 +55,7 @@ public class SpringDataRedisClientTest {
             lettuceConnectionFactory.setShareNativeConnection(true);
             SpringDataRedisClient client = new SpringDataRedisClient(lettuceConnectionFactory);
             client.set(FOO, BAR);
-            assertTrue(client.get(FOO).equals(BAR));
+            assertEquals(BAR, client.get(FOO));
         } catch (Exception e) {
             e.printStackTrace();
             fail();

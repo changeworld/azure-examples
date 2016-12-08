@@ -9,7 +9,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
@@ -18,7 +19,6 @@ import static org.junit.Assert.fail;
 public class ClusterTest {
     private static Cluster cluster;
     private static Set<HostAndPort> jedisClusterNodes;
-
     private static final String FOO = "foo";
     private static final String BAR = "bar";
     // In this line, replace <key> with your access key:
@@ -31,8 +31,8 @@ public class ClusterTest {
     @BeforeClass
     public static void beforeClass() throws IOException {
         jedisClusterNodes = new HashSet<HostAndPort>();
-        /* In this line, replace <name>, <port> with your cache name, port number:
-        jedisClusterNodes.add(new HostAndPort("<name>.redis.cache.windows.net", <port>);
+        /* In this line, replace <url>, <port> with your cache name, port number:
+        jedisClusterNodes.add(new HostAndPort("<url>", <port>);
         */
     }
 
@@ -41,6 +41,11 @@ public class ClusterTest {
         if (cluster != null) {
             cluster.close();
         }
+    }
+
+    @Test
+    public void shouldReturnTrue() {
+        assertSame(FOO, FOO);
     }
 
     /*
@@ -56,7 +61,7 @@ public class ClusterTest {
                     MAXREDIRECTS,
                     KEY);
             cluster.set(FOO, BAR);
-            assertTrue(cluster.get(FOO).equals(BAR));
+            assertEquals(BAR, cluster.get(FOO));
         } catch (Exception e) {
             e.printStackTrace();
             fail();
